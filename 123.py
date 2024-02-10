@@ -1,15 +1,21 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QLabel, QSplitter, QPushButton, QVBoxLayout
+from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QLabel, QPushButton, QVBoxLayout
 from PyQt5.QtGui import QFont
-from PyQt5.QtCore import QCoreApplication
 from qt_material import apply_stylesheet
-
 import sys
 
 
 class Ui_GameSticks(object):
-    def setupUi(self, GameSticks):
+    def __init__(self):
+        self.centralwidget = None
+        self.pushButton_2 = None
+        self.pushButton = None
+        self.label = None
+        self.GameSticks = None
+        self.second_window = None
 
+    def setupUi(self, GameSticks):
+        self.GameSticks = GameSticks
         self.label = QLabel()
         font = QFont()
         font.setFamily("Impact")
@@ -29,18 +35,7 @@ class Ui_GameSticks(object):
                                       "margin-bottom: 20px;")
         self.pushButton.setObjectName("pushButton")
         self.pushButton.setText("Начать игру")
-
-#функция по очистке экрана
-        def start_game():
-            # Очищаем экран
-            for child in GameSticks.centralWidget().children():
-                child.deleteLater()
-            GameSticks.centralWidget().deleteLater()
-
-            # Создаем новое окно
-            second_window = QWidget(GameSticks)
-            second_window.setStyleSheet("background-color: rgb(214,244,172)")
-            GameSticks.setCentralWidget(second_window)
+        self.pushButton.clicked.connect(self.start_game)
 
         self.pushButton_2 = QPushButton()
         self.pushButton_2.setStyleSheet("background-color: rgb(255, 255, 255);"
@@ -53,11 +48,11 @@ class Ui_GameSticks(object):
         self.pushButton_2.clicked.connect(self.exit_game)
 
         vbox = QVBoxLayout()
-        vbox.addStretch(0)  # вертикальное позиционирование
+        vbox.addStretch(0)
         vbox.addWidget(self.label, alignment=QtCore.Qt.AlignCenter)
         vbox.addWidget(self.pushButton, alignment=QtCore.Qt.AlignCenter)
         vbox.addWidget(self.pushButton_2, alignment=QtCore.Qt.AlignCenter)
-        vbox.addStretch()  # вертикальное позиционирование
+        vbox.addStretch()
 
         self.centralwidget = QWidget()
         self.centralwidget.setStyleSheet("background-color: rgb(214,244,172)")
@@ -68,9 +63,18 @@ class Ui_GameSticks(object):
         GameSticks.resize(800, 600)
         GameSticks.setCentralWidget(self.centralwidget)
 
+    def start_game(self):
+        second_window = QMainWindow()
+        # self.second_ui = Ui_SecondWindow()
+        # self.second_ui.setupUi(self.second_window)
+        second_window.show()
+        second_window.resize(800, 600)
+        # self.second_window.setCentralWidget(self.centralwidget)
+
     def exit_game(self):
         QtWidgets.qApp.quit()
         self.close()
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
@@ -79,41 +83,38 @@ if __name__ == "__main__":
     ui.setupUi(GameSticks)
     apply_stylesheet(app, theme='light_red.xml')
     GameSticks.show()
+    # SecondWindow = QMainWindow()
+    # SecondWindow.show()
     sys.exit(app.exec_())
 
-    app = QtWidgets.QApplication(sys.argv)
-    GameSticks = QtWidgets.QMainWindow()
-    ui = Ui_GameSticks()
-    ui.setupUi(GameSticks)
-    GameSticks.show()
-    sys.exit(app.exec_())
-
-
-sticks = 15
-print(sticks)
-count = 1
-def sum_sticks():
-    global sticks
-    global count
-    if count % 2 == 1:   #подправить условие
-        print('Player 1 you need')
-    else:
-        print('Player 2 you need')
-    subtract = int(input('Enter the number from 1 to 3: '))
-    print(sticks - subtract)
-    sticks = sticks - subtract
-
-    count += 1
-
-game = True
-while game:
-    if sticks > 1:
-        sum_sticks()
-    else:
-        game = False
-        print('Game is over')
-        #print(count)
-        if count // 2 == 0:
-            print('!!!Player 1 win, player 2 lose!!!')
-        else:
-            print('!!!Player 2 win, player 1 lose!!!')
+# sticks = 15
+# print(sticks)
+# count = 1
+#
+#
+# def sum_sticks():
+#     global sticks
+#     global count
+#     if count % 2 == 1:  # подправить условие
+#         print('Player 1 you need')
+#     else:
+#         print('Player 2 you need')
+#     subtract = int(input('Enter the number from 1 to 3: '))
+#     print(sticks - subtract)
+#     sticks = sticks - subtract
+#
+#     count += 1
+#
+#
+# game = True
+# while game:
+#     if sticks > 1:
+#         sum_sticks()
+#     else:
+#         game = False
+#         print('Game is over')
+#         # print(count)
+#         if count // 2 == 0:
+#             print('!!!Player 1 win, player 2 lose!!!')
+#         else:
+#             print('!!!Player 2 win, player 1 lose!!!')

@@ -3,11 +3,40 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QLabel, QSplitte
 from PyQt5.QtGui import QFont
 from PyQt5.QtCore import QCoreApplication
 from qt_material import apply_stylesheet
+from PyQt5.QtWidgets import QApplication, QMessageBox
 
 import sys
 
-
 class Ui_GameSticks(object):
+    def start_game(self):
+        msg_box = QMessageBox()
+        msg_box.setWindowTitle('Диалоговое окно')
+        msg_box.setText('Это пример диалогового окна')
+        msg_box.exec_()
+
+
+if __name__ == '__main__':
+    app = QApplication([])
+
+    window = QWidget()
+    window.setWindowTitle('Пример окна с QVBoxLayout')
+
+    layout = QVBoxLayout()
+
+    button = QPushButton('Показать диалог')
+    button.clicked.connect(showDialog)
+
+    layout.addWidget(button)
+    window.setLayout(layout)
+
+    window.show()
+
+    app.exec_()
+
+    def initUI(self):
+        self.setGeometry(100, 100, 300, 200)
+        self.setWindowTitle('Пример диалогового окна')
+
     def setupUi(self, GameSticks):
 
         self.label = QLabel()
@@ -30,17 +59,7 @@ class Ui_GameSticks(object):
         self.pushButton.setObjectName("pushButton")
         self.pushButton.setText("Начать игру")
 
-#функция по очистке экрана
-        def start_game():
-            # Очищаем экран
-            for child in GameSticks.centralWidget().children():
-                child.deleteLater()
-            GameSticks.centralWidget().deleteLater()
-
-            # Создаем новое окно
-            second_window = QWidget(GameSticks)
-            second_window.setStyleSheet("background-color: rgb(214,244,172)")
-            GameSticks.setCentralWidget(second_window)
+        self.pushButton.clicked.connect(self.start_game)
 
         self.pushButton_2 = QPushButton()
         self.pushButton_2.setStyleSheet("background-color: rgb(255, 255, 255);"
