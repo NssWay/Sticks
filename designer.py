@@ -64,11 +64,11 @@ class Ui_GameSticks(object):
         GameSticks.setCentralWidget(self.centralwidget)
 
     def start_game(self):
-        second_window = QMainWindow()
+        self.second_window = QMainWindow()
         # self.second_ui = Ui_SecondWindow()
         # self.second_ui.setupUi(self.second_window)
-        second_window.show()
-        second_window.resize(800, 600)
+        self.second_window.show()
+        self.second_window.resize(800, 600)
         # self.second_window.setCentralWidget(self.centralwidget)
 
     def exit_game(self):

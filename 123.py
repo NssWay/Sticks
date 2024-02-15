@@ -2,11 +2,13 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QLabel, QPushButton, QVBoxLayout
 from PyQt5.QtGui import QFont
 from qt_material import apply_stylesheet
+from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QLabel, QPushButton, QVBoxLayout
+from PyQt5.QtGui import QFont, QPalette, QColor
 import sys
 
 
 class Ui_GameSticks(object):
-    def __init__(self):
+    def init(self):
         self.centralwidget = None
         self.pushButton_2 = None
         self.pushButton = None
@@ -64,16 +66,38 @@ class Ui_GameSticks(object):
         GameSticks.setCentralWidget(self.centralwidget)
 
     def start_game(self):
-        second_window = QMainWindow()
-        # self.second_ui = Ui_SecondWindow()
-        # self.second_ui.setupUi(self.second_window)
-        second_window.show()
-        second_window.resize(800, 600)
-        # self.second_window.setCentralWidget(self.centralwidget)
+        self.second_window = EmptyWindow()
+        self.second_window.setupUi()
+        self.second_window.show()
+        self.second_window.setStyleSheet("background-color: rgb(214,244,172)")
+        self.second_window.move(self.GameSticks.pos())
+        self.second_window.resize(800, 600)
+        if self.GameSticks:
+            self.GameSticks.close()
 
     def exit_game(self):
         QtWidgets.qApp.quit()
         self.close()
+
+class EmptyWindow(QMainWindow):
+    def setupUi(self):
+        self.setWindowTitle("Empty Window")
+        self.resize(400, 300)
+
+        button = []
+        for i in range(15):
+            button = QPushButton("Click Me", self)
+            button.setGeometry(120 + 60 * (i % 5), 40 + 70 * (i // 5), 41, 81)
+            button.setStyleSheet("background-color: rgb(255, 0, 0)")
+
+    def init(self):
+        super().init()
+
+        self.setWindowTitle("Empty Window")
+        self.resize(400, 300)
+
+        button = QPushButton("Click Me", self)
+        button.setGeometry(150, 100, 100, 30)
 
 
 if __name__ == "__main__":
@@ -83,38 +107,4 @@ if __name__ == "__main__":
     ui.setupUi(GameSticks)
     apply_stylesheet(app, theme='light_red.xml')
     GameSticks.show()
-    # SecondWindow = QMainWindow()
-    # SecondWindow.show()
     sys.exit(app.exec_())
-
-# sticks = 15
-# print(sticks)
-# count = 1
-#
-#
-# def sum_sticks():
-#     global sticks
-#     global count
-#     if count % 2 == 1:  # подправить условие
-#         print('Player 1 you need')
-#     else:
-#         print('Player 2 you need')
-#     subtract = int(input('Enter the number from 1 to 3: '))
-#     print(sticks - subtract)
-#     sticks = sticks - subtract
-#
-#     count += 1
-#
-#
-# game = True
-# while game:
-#     if sticks > 1:
-#         sum_sticks()
-#     else:
-#         game = False
-#         print('Game is over')
-#         # print(count)
-#         if count // 2 == 0:
-#             print('!!!Player 1 win, player 2 lose!!!')
-#         else:
-#             print('!!!Player 2 win, player 1 lose!!!')
