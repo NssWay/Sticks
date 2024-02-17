@@ -1,23 +1,125 @@
-from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QMessageBox
+from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QLabel, QPushButton, QVBoxLayout
+from PyQt5.QtGui import QFont
+from qt_material import apply_stylesheet
+from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QLabel, QPushButton, QVBoxLayout
+from PyQt5.QtGui import QFont, QPalette, QColor
+from PyQt5.QtCore import Qt
+
+import sys
 
 
-def showDialog():
-    msg_box = Q
-    msg_box.setWindowTitle('Диалоговое окно')
-    msg_box.setText('Это пример диалогового окна')
-    msg_box.exec_()
+class Ui_GameSticks(object):
+    def init(self):
+        self.centralwidget = None
+        self.pushButton_2 = None
+        self.pushButton = None
+        self.label = None
+        self.GameSticks = None
+        self.second_window = None
 
+    def setupUi(self, GameSticks):
+        self.GameSticks = GameSticks
+        self.label = QLabel()
+        font = QFont()
+        font.setFamily("Impact")
+        self.label.setFont(font)
+        self.label.setObjectName("label")
+        self.label.setText("Добро пожаловать в игру Палочки!!!")
+        self.label.setStyleSheet('font-size: 26px;'
+                                 'font-weight: bold;'
+                                 'margin-bottom: 50px;')
 
-if __name__ == '__main__':
-    app = QApplication([])
+        self.pushButton = QPushButton()
+        self.pushButton.setEnabled(True)
+        self.pushButton.setStyleSheet("background-color: rgb(255, 255, 255);"
+                                      "min-height: 70px;"
+                                      "max-width: 300px;"
+                                      "min-width: 250px;"
+                                      "margin-bottom: 20px;")
+        self.pushButton.setObjectName("pushButton")
+        self.pushButton.setText("Начать игру")
+        self.pushButton.clicked.connect(self.start_game)
 
-    window = QWidget()
-    window.setGeometry(100, 100, 300, 200)
-    window.setWindowTitle('Пример окна с кнопкой')
+        self.pushButton_2 = QPushButton()
+        self.pushButton_2.setStyleSheet("background-color: rgb(255, 255, 255);"
+                                        "min-height: 70px;"
+                                        "max-width: 300px;"
+                                        "min-width: 250px;"
+                                        "margin-bottom: 20px;")
+        self.pushButton_2.setObjectName("pushButton_2")
+        self.pushButton_2.setText("Выйти из игры")
+        self.pushButton_2.clicked.connect(self.exit_game)
 
-    button = QPushButton('Показать диалог', window)
-    button.clicked.connect(showDialog)
+        vbox = QVBoxLayout()
+        vbox.addStretch(0)
+        vbox.addWidget(self.label, alignment=QtCore.Qt.AlignCenter)
+        vbox.addWidget(self.pushButton, alignment=QtCore.Qt.AlignCenter)
+        vbox.addWidget(self.pushButton_2, alignment=QtCore.Qt.AlignCenter)
+        vbox.addStretch()
 
-    window.show()
+        self.centralwidget = QWidget()
+        self.centralwidget.setStyleSheet("background-color: rgb(214,244,172)")
+        self.centralwidget.setObjectName("centralwidget")
+        self.centralwidget.setLayout(vbox)
 
-    app.exec_()
+        GameSticks.setWindowTitle("GameSticks")
+        GameSticks.resize(800, 600)
+        GameSticks.setCentralWidget(self.centralwidget)
+
+    def start_game(self):
+        self.second_window = EmptyWindow()
+        self.second_window.setupUi()
+        self.second_window.show()
+        self.second_window.setStyleSheet("background-color: rgb(214,244,172)")
+        self.second_window.move(self.GameSticks.pos())
+        self.second_window.resize(800, 600)
+        if self.GameSticks:
+            self.GameSticks.close()
+
+    def exit_game(self):
+        QtWidgets.qApp.quit()
+        self.close()
+
+class EmptyWindow(QMainWindow):
+    def setupUi(self):
+        self.setWindowTitle("GameSticks")
+        self.resize(400, 300)
+
+        button = []
+        for i in range(15):
+            button = QPushButton("шмяк", self)
+            button.setGeometry(40 + 120 * (i % 5), 40 + 80 * (i // 5), 100, 30)
+            button.setStyleSheet("background-color: rgb(255, 0, 0)")
+
+        #проработать надпись, не работает
+        label = QLabel('Выберите количество палочек', self)
+        label.setObjectName('label')
+        label.setGeometry(20, 300, 400, 30)
+        label.setAlignment(Qt.AlignCenter)
+        label.show()
+        label.setStyleSheet('font-size: 26px;'
+                            'font-weight: bold;')
+
+        for i in range(1, 4):
+            red_button = QPushButton(str(i), self)
+            red_button.setGeometry(40 + 120 * (i - 1), 350, 100, 30)
+            red_button.setStyleSheet("background-color: red; color: white;")
+
+    def init(self):
+        super().init()
+
+        self.setWindowTitle("Empty Window")
+        self.resize(400, 300)
+
+        button = QPushButton("Click Me", self)
+        button.setGeometry(150, 100, 100, 30)
+
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    GameSticks = QMainWindow()
+    ui = Ui_GameSticks()
+    ui.setupUi(GameSticks)
+    apply_stylesheet(app, theme='light_red.xml')
+    GameSticks.show()
+    sys.exit(app.exec_())
