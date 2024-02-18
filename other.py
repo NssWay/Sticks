@@ -84,36 +84,52 @@ class Ui_GameSticks(object):
 class EmptyWindow(QMainWindow):
     def setupUi(self):
         self.setWindowTitle("GameSticks")
-        self.resize(400, 300)
+        self.resize(400, 400)
 
-        button = []
+        self.buttons = []
         for i in range(15):
             button = QPushButton("шмяк", self)
             button.setGeometry(40 + 120 * (i % 5), 40 + 80 * (i // 5), 100, 30)
             button.setStyleSheet("background-color: rgb(255, 0, 0)")
+            self.buttons.append(button)
 
-        #проработать надпись, не работает
         label = QLabel('Выберите количество палочек', self)
         label.setObjectName('label')
         label.setGeometry(20, 300, 400, 30)
         label.setAlignment(Qt.AlignCenter)
         label.show()
-        label.setStyleSheet('font-size: 26px;'
-                            'font-weight: bold;')
+        label.setStyleSheet('font-size: 26px; font-weight: bold;')
 
-        for i in range(1, 4):
-            red_button = QPushButton(str(i), self)
-            red_button.setGeometry(40 + 120 * (i - 1), 350, 100, 30)
-            red_button.setStyleSheet("background-color: red; color: white;")
+        play_button1 = QPushButton("1", self)
+        play_button1.setGeometry(40, 350, 100, 30)
+        play_button1.setStyleSheet("background-color: white; color: red;")
+        play_button1.clicked.connect(lambda: self.hide_buttons(1))
+
+        play_button2 = QPushButton("2", self)
+        play_button2.setGeometry(160, 350, 100, 30)
+        play_button2.setStyleSheet("background-color: white; color: red;")
+        play_button2.clicked.connect(lambda: self.hide_buttons(2))
+
+        play_button3 = QPushButton("3", self)
+        play_button3.setGeometry(280, 350, 100, 30)
+        play_button3.setStyleSheet("background-color: white; color: red;")
+        play_button3.clicked.connect(lambda: self.hide_buttons(3))
+
+    def hide_buttons(self, num_to_hide):
+        if len(self.buttons) >= num_to_hide:
+            for _ in range(num_to_hide):
+                button_to_hide = self.buttons.pop(0)
+                button_to_hide.hide()
 
     def init(self):
         super().init()
 
         self.setWindowTitle("Empty Window")
-        self.resize(400, 300)
+        self.resize(400, 400)
 
-        button = QPushButton("Click Me", self)
+        button = QPushButton(" ", self)
         button.setGeometry(150, 100, 100, 30)
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
