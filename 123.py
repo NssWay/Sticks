@@ -4,6 +4,9 @@ from PyQt5.QtGui import QFont
 from qt_material import apply_stylesheet
 from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QLabel, QPushButton, QVBoxLayout
 from PyQt5.QtGui import QFont, QPalette, QColor
+from PyQt5.QtCore import Qt
+from PyQt5.QtCore import QTimer
+
 import sys
 
 
@@ -61,7 +64,7 @@ class Ui_GameSticks(object):
         self.centralwidget.setObjectName("centralwidget")
         self.centralwidget.setLayout(vbox)
 
-        GameSticks.setObjectName("GameSticks")
+        GameSticks.setWindowTitle("GameSticks")
         GameSticks.resize(800, 600)
         GameSticks.setCentralWidget(self.centralwidget)
 
@@ -81,24 +84,52 @@ class Ui_GameSticks(object):
 
 class EmptyWindow(QMainWindow):
     def setupUi(self):
-        self.setWindowTitle("Empty Window")
-        self.resize(400, 300)
+        self.setWindowTitle("GameSticks")
+        self.resize(400, 400)
 
-        button = []
+        self.buttons = []
         for i in range(15):
-            button = QPushButton("Click Me", self)
-            button.setGeometry(120 + 60 * (i % 5), 40 + 70 * (i // 5), 41, 81)
+            button = QPushButton("шмяк", self)
+            button.setGeometry(40 + 120 * (i % 5), 40 + 80 * (i // 5), 100, 30)
             button.setStyleSheet("background-color: rgb(255, 0, 0)")
+            self.buttons.append(button)
+
+        label = QLabel('Выберите количество палочек', self)
+        label.setObjectName('label')
+        label.setGeometry(20, 300, 400, 30)
+        label.setAlignment(Qt.AlignCenter)
+        label.show()
+        label.setStyleSheet('font-size: 26px; font-weight: bold;')
+
+        play_button1 = QPushButton("1", self)
+        play_button1.setGeometry(40, 350, 100, 30)
+        play_button1.setStyleSheet("background-color: red; color: white;") #изменить цвет на белый красный
+        play_button1.clicked.connect(lambda: self.hide_buttons(1))
+
+        play_button2 = QPushButton("2", self)
+        play_button2.setGeometry(160, 350, 100, 30)
+        play_button2.setStyleSheet("background-color: blue; color: white;") #изменить цвет на белый красный
+        play_button2.clicked.connect(lambda: self.hide_buttons(2))
+
+        play_button3 = QPushButton("3", self)
+        play_button3.setGeometry(280, 350, 100, 30)
+        play_button3.setStyleSheet("background-color: green; color: white;") #изменить цвет на белый красный
+        play_button3.clicked.connect(lambda: self.hide_buttons(3))
+
+    def hide_buttons(self, num_to_hide):
+        if len(self.buttons) >= num_to_hide:
+            for _ in range(num_to_hide):
+                button_to_hide = self.buttons.pop(0)
+                button_to_hide.hide()
 
     def init(self):
         super().init()
 
         self.setWindowTitle("Empty Window")
-        self.resize(400, 300)
+        self.resize(400, 400)
 
-        button = QPushButton("Click Me", self)
+        button = QPushButton(" ", self)
         button.setGeometry(150, 100, 100, 30)
-
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

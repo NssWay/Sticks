@@ -5,6 +5,7 @@ from qt_material import apply_stylesheet
 from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QLabel, QPushButton, QVBoxLayout
 from PyQt5.QtGui import QFont, QPalette, QColor
 from PyQt5.QtCore import Qt
+from PyQt5.QtCore import QTimer
 
 import sys
 
@@ -102,19 +103,19 @@ class EmptyWindow(QMainWindow):
 
         play_button1 = QPushButton("1", self)
         play_button1.setGeometry(40, 350, 100, 30)
-        play_button1.setStyleSheet("background-color: white; color: red;")
+        play_button1.setStyleSheet("background-color: red; color: white;") #изменить цвет на белый красный
         play_button1.clicked.connect(lambda: self.hide_buttons(1))
 
         play_button2 = QPushButton("2", self)
         play_button2.setGeometry(160, 350, 100, 30)
-        play_button2.setStyleSheet("background-color: white; color: red;")
+        play_button2.setStyleSheet("background-color: blue; color: white;") #изменить цвет на белый красный
         play_button2.clicked.connect(lambda: self.hide_buttons(2))
 
         play_button3 = QPushButton("3", self)
         play_button3.setGeometry(280, 350, 100, 30)
-        play_button3.setStyleSheet("background-color: white; color: red;")
+        play_button3.setStyleSheet("background-color: green; color: white;") #изменить цвет на белый красный
         play_button3.clicked.connect(lambda: self.hide_buttons(3))
-
+        
     def hide_buttons(self, num_to_hide):
         if len(self.buttons) >= num_to_hide:
             for _ in range(num_to_hide):
@@ -129,7 +130,6 @@ class EmptyWindow(QMainWindow):
 
         button = QPushButton(" ", self)
         button.setGeometry(150, 100, 100, 30)
-
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
