@@ -103,21 +103,26 @@ class EmptyWindow(QMainWindow):
 
         play_button1 = QPushButton("1", self)
         play_button1.setGeometry(40, 350, 100, 30)
-        play_button1.setStyleSheet("background-color: red; color: white;") #изменить цвет на белый красный
+        play_button1.setStyleSheet("background-color: red; color: white;")
         play_button1.clicked.connect(lambda: self.hide_buttons(1))
 
         play_button2 = QPushButton("2", self)
         play_button2.setGeometry(160, 350, 100, 30)
-        play_button2.setStyleSheet("background-color: blue; color: white;") #изменить цвет на белый красный
+        play_button2.setStyleSheet("background-color: blue; color: white;")
         play_button2.clicked.connect(lambda: self.hide_buttons(2))
 
         play_button3 = QPushButton("3", self)
         play_button3.setGeometry(280, 350, 100, 30)
-        play_button3.setStyleSheet("background-color: green; color: white;") #изменить цвет на белый красный
+        play_button3.setStyleSheet("background-color: green; color: white;")
         play_button3.clicked.connect(lambda: self.hide_buttons(3))
 
+        turn_label = QLabel('Ход игрока: ', self)
+        turn_label.setGeometry(470, 300, 150, 30)
+        turn_label.setAlignment(Qt.AlignRight)
+        turn_label.setStyleSheet('font-size: 26px; font-weight: bold;')
+
     def hide_buttons(self, num_to_hide):
-        if len(self.buttons) >= num_to_hide:
+        if len(self.buttons) > num_to_hide:
             for _ in range(num_to_hide):
                 button_to_hide = self.buttons.pop(0)
                 button_to_hide.hide()

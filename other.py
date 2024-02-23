@@ -85,7 +85,7 @@ class Ui_GameSticks(object):
 class EmptyWindow(QMainWindow):
     def setupUi(self):
         self.setWindowTitle("GameSticks")
-        self.resize(400, 400)
+        self.resize(600, 400)
 
         self.buttons = []
         for i in range(15):
@@ -103,24 +103,44 @@ class EmptyWindow(QMainWindow):
 
         play_button1 = QPushButton("1", self)
         play_button1.setGeometry(40, 350, 100, 30)
-        play_button1.setStyleSheet("background-color: red; color: white;") #изменить цвет на белый красный
+        play_button1.setStyleSheet("background-color: red; color: white;")
         play_button1.clicked.connect(lambda: self.hide_buttons(1))
 
         play_button2 = QPushButton("2", self)
         play_button2.setGeometry(160, 350, 100, 30)
-        play_button2.setStyleSheet("background-color: blue; color: white;") #изменить цвет на белый красный
+        play_button2.setStyleSheet("background-color: blue; color: white;")
         play_button2.clicked.connect(lambda: self.hide_buttons(2))
 
         play_button3 = QPushButton("3", self)
         play_button3.setGeometry(280, 350, 100, 30)
-        play_button3.setStyleSheet("background-color: green; color: white;") #изменить цвет на белый красный
+        play_button3.setStyleSheet("background-color: green; color: white;")
         play_button3.clicked.connect(lambda: self.hide_buttons(3))
-        
+
+        self.turn_number = 1
+        self.turn_label = QLabel(f'  Xод игрока: {self.turn_number}', self)
+        self.turn_label.setGeometry(450, 300, 170, 30)
+        self.turn_label.setAlignment(Qt.AlignRight)
+        self.turn_label.setStyleSheet('font-size: 26px; font-weight: bold;')
+
+#Эта надпись должна появляться, после окончания игры, и указывать номер игрока, на котором закончился ход
+#Надпись с ходом игрока должна убираться, после вывода окна проигрыш
+        self.win_label = QLabel("!!!Игрок 1 выиграл!!!", self)
+        self.win_label.setGeometry(250, 400, 300, 200)
+        self.win_label.setAlignment(Qt.AlignCenter)
+        self.win_label.setStyleSheet('font-size: 26px; font-weight: bold; color: red')
+
     def hide_buttons(self, num_to_hide):
-        if len(self.buttons) >= num_to_hide:
+        if len(self.buttons) > num_to_hide:
             for _ in range(num_to_hide):
                 button_to_hide = self.buttons.pop(0)
                 button_to_hide.hide()
+
+            if self.turn_number == 1:
+                self.turn_number = 2
+            else:
+                self.turn_number = 1
+
+            self.turn_label.setText(f'Ход игрока: {self.turn_number}')
 
     def init(self):
         super().init()
