@@ -118,16 +118,9 @@ class EmptyWindow(QMainWindow):
 
         self.turn_number = 1
         self.turn_label = QLabel(f'  Xод игрока: {self.turn_number}', self)
-        self.turn_label.setGeometry(450, 300, 170, 30)
+        self.turn_label.setGeometry(450, 300, 250, 30)
         self.turn_label.setAlignment(Qt.AlignRight)
         self.turn_label.setStyleSheet('font-size: 26px; font-weight: bold;')
-
-#Эта надпись должна появляться, после окончания игры, и указывать номер игрока, на котором закончился ход
-#Надпись с ходом игрока должна убираться, после вывода окна проигрыш
-        self.win_label = QLabel("!!!Игрок 1 выиграл!!!", self)
-        self.win_label.setGeometry(250, 400, 300, 200)
-        self.win_label.setAlignment(Qt.AlignCenter)
-        self.win_label.setStyleSheet('font-size: 26px; font-weight: bold; color: red')
 
     def hide_buttons(self, num_to_hide):
         if len(self.buttons) > num_to_hide:
@@ -135,12 +128,19 @@ class EmptyWindow(QMainWindow):
                 button_to_hide = self.buttons.pop(0)
                 button_to_hide.hide()
 
-            if self.turn_number == 1:
-                self.turn_number = 2
-            else:
-                self.turn_number = 1
+            if len(self.buttons) == 1:  # Проверяем, что осталась только одна кнопка
+                winner_number = 2 if self.turn_number == 1 else 1
+                self.win_label = QLabel(f"!!!Игрок {winner_number} выиграл!!!", self)
+                self.win_label.setGeometry(250, 400, 300, 200)
+                self.win_label.setAlignment(Qt.AlignCenter)
+                self.win_label.setStyleSheet('font-size: 26px; font-weight: bold; color: red')
+                self.win_label.show()
 
-            self.turn_label.setText(f'Ход игрока: {self.turn_number}')
+                self.turn_label.setText("Игра закончена")  # Изменяем текст в turn_label
+
+            else:
+                self.turn_number = 2 if self.turn_number == 1 else 1
+                self.turn_label.setText(f'Ход игрока: {self.turn_number}')
 
     def init(self):
         super().init()
