@@ -82,6 +82,7 @@ class Ui_GameSticks(object):
         QtWidgets.qApp.quit()
         self.close()
 
+
 class EmptyWindow(QMainWindow):
     def setupUi(self):
         self.setWindowTitle("GameSticks")
@@ -89,8 +90,8 @@ class EmptyWindow(QMainWindow):
 
         self.buttons = []
         for i in range(15):
-            button = QPushButton("шмяк", self)
-            button.setGeometry(40 + 120 * (i % 5), 40 + 80 * (i // 5), 100, 30)
+            button = QPushButton(" ", self)
+            button.setGeometry(30 + 50 * (i % 15), 40 + 80 * (i // 15), 30, 170)
             button.setStyleSheet("background-color: rgb(255, 0, 0)")
             self.buttons.append(button)
 
@@ -100,6 +101,8 @@ class EmptyWindow(QMainWindow):
         label.setAlignment(Qt.AlignCenter)
         label.show()
         label.setStyleSheet('font-size: 26px; font-weight: bold;')
+
+        #НУЖНО: добавитьк кнопк, которая будет отвечать за перезапуск игры.
 
         play_button1 = QPushButton("1", self)
         play_button1.setGeometry(40, 350, 100, 30)
@@ -117,7 +120,7 @@ class EmptyWindow(QMainWindow):
         play_button3.clicked.connect(lambda: self.hide_buttons(3))
 
         self.turn_number = 1
-        self.turn_label = QLabel(f'  Xод игрока: {self.turn_number}', self)
+        self.turn_label = QLabel(f'Ход игрока: {self.turn_number}', self)
         self.turn_label.setGeometry(450, 300, 250, 30)
         self.turn_label.setAlignment(Qt.AlignRight)
         self.turn_label.setStyleSheet('font-size: 26px; font-weight: bold;')
@@ -128,7 +131,7 @@ class EmptyWindow(QMainWindow):
                 button_to_hide = self.buttons.pop(0)
                 button_to_hide.hide()
 
-            if len(self.buttons) == 1:  # Проверяем, что осталась только одна кнопка
+            if len(self.buttons) == 1:
                 winner_number = 2 if self.turn_number == 1 else 1
                 self.win_label = QLabel(f"!!!Игрок {winner_number} выиграл!!!", self)
                 self.win_label.setGeometry(250, 400, 300, 200)
@@ -136,11 +139,21 @@ class EmptyWindow(QMainWindow):
                 self.win_label.setStyleSheet('font-size: 26px; font-weight: bold; color: red')
                 self.win_label.show()
 
-                self.turn_label.setText("Игра закончена")  # Изменяем текст в turn_label
+                self.turn_label.setText("Игра закончена")
 
             else:
                 self.turn_number = 2 if self.turn_number == 1 else 1
                 self.turn_label.setText(f'Ход игрока: {self.turn_number}')
+
+    def restart_game(self):
+        for button in self.buttons:
+            button.show()
+
+        if hasattr(self, 'win_label'):
+            self.win_label.deleteLater()
+
+        self.turn_number = 1
+        self.turn_label.setText(f'Ход игрока: {self.turn_number}')
 
     def init(self):
         super().init()
@@ -148,8 +161,6 @@ class EmptyWindow(QMainWindow):
         self.setWindowTitle("Empty Window")
         self.resize(400, 400)
 
-        button = QPushButton(" ", self)
-        button.setGeometry(150, 100, 100, 30)
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
@@ -159,3 +170,11 @@ if __name__ == "__main__":
     apply_stylesheet(app, theme='light_red.xml')
     GameSticks.show()
     sys.exit(app.exec_())
+
+    # добавить кнопку ESC для закрытия приложения
+    # при нажатии кнопки ESС переспросить всплывающим окном, уверены что вы хотите выйти
+    # Идея: играет музыка, когда убирается палочки из музыки на фоне убирается опр. политра звуков.
+    # добавить кнопку перезапука, в сплывающем окне "хотите ли сиграть ещё"
+    # если ответ да, то игра начианется заного, если ответ нет, то игра закрывается
+    # сделать всё на одном окне
+    # ПРИ ДОБАВЛЕНИИ КАКИХ-ЛИБО ДОПОЛНЕНИЙ В ПРОГРАММУ ИЗМЕНЕНИЯ ТАКЖЕ ОТСЛЕЖИВАТЬ В ТЗ.
