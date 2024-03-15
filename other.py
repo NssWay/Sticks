@@ -1,11 +1,10 @@
-from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QLabel, QPushButton, QVBoxLayout
-from PyQt5.QtGui import QFont
+from PyQt5 import QtCore,QtWidgets
 from qt_material import apply_stylesheet
 from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QLabel, QPushButton, QVBoxLayout
-from PyQt5.QtGui import QFont, QPalette, QColor
+from PyQt5.QtGui import QFont
 from PyQt5.QtCore import Qt
-from PyQt5.QtCore import QTimer
+from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QMessageBox
+
 
 import sys
 
@@ -89,8 +88,8 @@ class EmptyWindow(QMainWindow):
 
         self.buttons = []
         for i in range(15):
-            button = QPushButton("шмяк", self)
-            button.setGeometry(40 + 120 * (i % 5), 40 + 80 * (i // 5), 100, 30)
+            button = QPushButton(" ", self)
+            button.setGeometry(30 + 50 * (i % 15), 40 + 80 * (i // 15), 30, 170)
             button.setStyleSheet("background-color: rgb(255, 0, 0)")
             self.buttons.append(button)
 
@@ -115,6 +114,20 @@ class EmptyWindow(QMainWindow):
         play_button3.setGeometry(280, 350, 100, 30)
         play_button3.setStyleSheet("background-color: green; color: white;")
         play_button3.clicked.connect(lambda: self.hide_buttons(3))
+
+        restart_button = QPushButton("Restart", self)
+        restart_button.setGeometry(600, 450, 120, 45)
+        restart_button.setStyleSheet("background-color: red; color: white;")
+        restart_button.clicked.connect(self.show_popup)
+
+        #при использовании данной функции перестает открываться второе окно
+        def show_popup(self):
+            popup = QMessageBox()
+            popup.setWindowTitle("Restart Confirmation")
+            popup.setText("Вы уверены, что хотите начать игру заново?")
+            popup.setIcon(QMessageBox.Question)
+            popup.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
+            popup.setDefaultButton(QMessageBox.No)
 
         self.turn_number = 1
         self.turn_label = QLabel(f'  Xод игрока: {self.turn_number}', self)

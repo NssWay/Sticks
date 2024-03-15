@@ -1,11 +1,9 @@
-from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QLabel, QPushButton, QVBoxLayout
-from PyQt5.QtGui import QFont
+from PyQt5 import QtCore, QtWidgets
 from qt_material import apply_stylesheet
-from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QLabel, QPushButton, QVBoxLayout
-from PyQt5.QtGui import QFont, QPalette, QColor
+from PyQt5.QtWidgets import  QMainWindow,  QLabel, QVBoxLayout
+from PyQt5.QtGui import QFont
 from PyQt5.QtCore import Qt
-from PyQt5.QtCore import QTimer
+from PyQt5.QtWidgets import QApplication, QWidget, QPushButton
 
 import sys
 
@@ -102,8 +100,6 @@ class EmptyWindow(QMainWindow):
         label.show()
         label.setStyleSheet('font-size: 26px; font-weight: bold;')
 
-        #НУЖНО: добавитьк кнопк, которая будет отвечать за перезапуск игры.
-
         play_button1 = QPushButton("1", self)
         play_button1.setGeometry(40, 350, 100, 30)
         play_button1.setStyleSheet("background-color: red; color: white;")
@@ -118,6 +114,11 @@ class EmptyWindow(QMainWindow):
         play_button3.setGeometry(280, 350, 100, 30)
         play_button3.setStyleSheet("background-color: green; color: white;")
         play_button3.clicked.connect(lambda: self.hide_buttons(3))
+
+        restart_button = QPushButton("Переигровка", self)
+        restart_button.setGeometry(600, 500, 130, 45)
+        restart_button.setStyleSheet("background-color: green; color: white;")
+        restart_button.clicked.connect(self.show_popup)
 
         self.turn_number = 1
         self.turn_label = QLabel(f'Ход игрока: {self.turn_number}', self)
@@ -144,10 +145,6 @@ class EmptyWindow(QMainWindow):
             else:
                 self.turn_number = 2 if self.turn_number == 1 else 1
                 self.turn_label.setText(f'Ход игрока: {self.turn_number}')
-
-    def restart_game(self):
-        for button in self.buttons:
-            button.show()
 
         if hasattr(self, 'win_label'):
             self.win_label.deleteLater()
