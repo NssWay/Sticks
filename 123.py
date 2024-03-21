@@ -1,9 +1,11 @@
+import keyboard
 from PyQt5 import QtCore, QtWidgets
 from qt_material import apply_stylesheet
 from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QLabel, QPushButton, QVBoxLayout
-from PyQt5.QtGui import QFont
+from PyQt5.QtGui import QFont, QKeySequence
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QMessageBox
+
 
 import sys
 
@@ -17,6 +19,12 @@ class Ui_GameSticks(object):
         self.label = None
         self.GameSticks = None
         self.second_window = None
+
+    def close(key):
+        if key == keyboard.Key.esc:
+            Ui_GameSticks.destroy()
+            # screen_zone.screen()
+            return False
 
     def setupUi(self, GameSticks):
         self.GameSticks = GameSticks
@@ -78,7 +86,7 @@ class Ui_GameSticks(object):
 
     def exit_game(self):
         QtWidgets.qApp.quit()
-        self.close()
+        Ui_GameSticks.close()
 
 
 class EmptyWindow(QMainWindow):
@@ -145,7 +153,12 @@ class EmptyWindow(QMainWindow):
         returnValue = popup.exec()
         if returnValue == QMessageBox.Yes:
             print('Yes clicked')
-
+            self.buttons = []
+            for i in range(15):
+                button = QPushButton(" ", self)
+                button.setGeometry(30 + 50 * (i % 15), 40 + 80 * (i // 15), 30, 170)
+                button.setStyleSheet("background-color: rgb(255, 0, 0)")
+                self.buttons.append(button)
         else:
             self.close()
             print('No clicked')
@@ -167,7 +180,20 @@ class EmptyWindow(QMainWindow):
             else:
                 self.turn_number = 2 if self.turn_number == 1 else 1
                 self.turn_label.setText(f'Ход игрока: {self.turn_number}')
-
+    def show_popup(self):
+        print('hi')
+        popup = QMessageBox()
+        popup.setIcon(QMessageBox.Information)
+        popup.setWindowTitle("Restart Confirmation")
+        popup.setText("Вы уверены, что хотите начать игру заново?")
+        popup.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
+        returnValue = popup.exec()
+        if returnValue == QMessageBox.Yes:
+            print('Yes clicked')
+            #добавить возможность начала новой игры
+        else:
+            print('No clicked')
+            self.close()
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
