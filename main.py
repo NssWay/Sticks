@@ -11,14 +11,6 @@ import sys
 
 
 class Ui_GameSticks(object):
-    def init(self):
-        self.centralwidget = None
-        self.pushButton_2 = None
-        self.pushButton = None
-        self.label = None
-        self.GameSticks = None
-        self.second_window = None
-
     def setupUi(self, GameSticks):
         self.GameSticks = GameSticks
         self.label = QLabel()

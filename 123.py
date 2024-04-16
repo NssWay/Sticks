@@ -1,30 +1,24 @@
-import keyboard
-from PyQt5 import QtCore, QtWidgets
-from qt_material import apply_stylesheet
-from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QLabel, QPushButton, QVBoxLayout
-from PyQt5.QtGui import QFont, QKeySequence
-from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QMessageBox
-
-
 import sys
+
+from PyQt5 import QtCore, QtWidgets
+from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QFont
+from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QMessageBox
+from PyQt5.QtWidgets import QWidget, QLabel, QVBoxLayout
+from qt_material import apply_stylesheet
+
+
+class GameSticks(QMainWindow):
+    def keyPressEvent(self, event):
+        if event.key() == Qt.Key_Escape:
+            QtWidgets.qApp.quit()
+
+
+def exit_game():
+    QtWidgets.qApp.quit()
 
 
 class Ui_GameSticks(object):
-    def __init__(self):
-        self.second_window = None
-        self.centralwidget = None
-        self.pushButton_2 = None
-        self.pushButton = None
-        self.label = None
-        self.GameSticks = None
-        self.second_window = None
-
-    def close(key):
-        if key == keyboard.Key.esc:
-            Ui_GameSticks.destroy()
-            # screen_zone.screen()
-            return False
 
     def setupUi(self, GameSticks):
         self.GameSticks = GameSticks
@@ -60,7 +54,7 @@ class Ui_GameSticks(object):
                                         "color: rgb(76,76,76)")
         self.pushButton_2.setObjectName("pushButton_2")
         self.pushButton_2.setText("Выйти из игры")
-        self.pushButton_2.clicked.connect(self.exit_game)
+        self.pushButton_2.clicked.connect(exit_game)
 
         vbox = QVBoxLayout()
         vbox.addStretch(0)
@@ -87,14 +81,6 @@ class Ui_GameSticks(object):
         if self.GameSticks:
             self.GameSticks.close()
 
-    def exit_game(self):
-        QtWidgets.qApp.quit()
-        Ui_GameSticks.close()
-
-#не работает, не закрывает при нажатии на esc
-    def keyPressEvent(self, event):
-        if event.key() == Qt.Key_Escape:
-            self.close()
 
 class EmptyWindow(QMainWindow):
     def __init__(self):
@@ -113,6 +99,7 @@ class EmptyWindow(QMainWindow):
             button = QPushButton(" ", self)
             button.setGeometry(30 + 50 * (i % 15), 40 + 80 * (i // 15), 30, 170)
             button.setStyleSheet("background-color: rgb(149,163,146)")
+            button.show()
             self.buttons.append(button)
 
         label = QLabel('Выберите количество палочек', self)
@@ -150,9 +137,7 @@ class EmptyWindow(QMainWindow):
         self.turn_label.setStyleSheet('font-size: 26px; font-weight: bold;'
                                       'color: rgb(76,76,76)')
 
-    # при использовании данной функции перестает открываться второе окно
     def show_popup(self):
-        print('hi')
         popup = QMessageBox()
         popup.setIcon(QMessageBox.Information)
         popup.setWindowTitle("Restart Confirmation")
@@ -163,7 +148,7 @@ class EmptyWindow(QMainWindow):
         if returnValue == QMessageBox.Yes:
             print('Yes clicked')
             self.buttons = []
-            if len(self.buttons) == 1:  # Проверяем, что осталась только одна кнопка
+            if len(self.buttons) == 1:
                 winner_number = 2 if self.turn_number == 1 else 1
                 self.win_label = QLabel(f"!!!Игрок {winner_number} выиграл!!!", self)
                 self.win_label.setGeometry(250, 400, 300, 200)
@@ -177,8 +162,9 @@ class EmptyWindow(QMainWindow):
             for i in range(15):
                 button = QPushButton(" ", self)
                 button.setGeometry(30 + 50 * (i % 15), 40 + 80 * (i // 15), 30, 170)
-                button.setStyleSheet("background-color: rgb(152,160,164)")
+                button.setStyleSheet("background-color: rgb(149,163,146)")
                 self.buttons.append(button)
+                button.show()
         else:
             self.close()
             print('No clicked')
@@ -200,31 +186,11 @@ class EmptyWindow(QMainWindow):
             else:
                 self.turn_number = 2 if self.turn_number == 1 else 1
                 self.turn_label.setText(f'Ход игрока: {self.turn_number}')
-    def show_popup(self):
-        print('hi')
-        popup = QMessageBox()
-        popup.setIcon(QMessageBox.Information)
-        popup.setWindowTitle("Restart Confirmation")
-        popup.setText("Вы уверены, что хотите начать игру заново?")
-        popup.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
-        returnValue = popup.exec()
-        if returnValue == QMessageBox.Yes:
-            print('Yes clicked')
-            self.buttons = []  # Очистить список кнопок
-            for i in range(15):  # Создать новые кнопки
-                button = QPushButton(" ", self)
-                button.setGeometry(30 + 50 * (i % 15), 40 + 80 * (i // 15), 30, 170)
-                button.setStyleSheet("background-color: rgb(149,163,146)")
-                self.buttons.append(button)
-            self.turn_number = 1  # Сбросить счетчик ходов
-            self.turn_label.setText(f'Ход игрока: {self.turn_number}')
-        else:
-            print('No clicked')
-            self.close()
+
     def keyPressEvent(self, event):
         if event.key() == Qt.Key_Escape:
-                    QApplication.quit()
-#перезапуск работает но не показывает кнопки
+            QApplication.quit()
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
@@ -234,10 +200,3 @@ if __name__ == "__main__":
     apply_stylesheet(app, theme='rgb(152,160,164)')
     GameSticks.show()
     sys.exit(app.exec_())
-    widget.setWindowTitle('Закрытие программы на кнопку Escape')
-
-    #правильно изменить все цвета
-    #При нажатии на кнопку escape в главном меню приложение не закрывается, ИСПРАВИТЬ
-    # сделать всё на одном окне
-    # ПРИ ДОБАВЛЕНИИ КАКИХ-ЛИБО ДОПОЛНЕНИЙ В ПРОГРАММУ ИЗМЕНЕНИЯ ТАКЖЕ ОТСЛЕЖИВАТЬ В ТЗ.
-
