@@ -6,17 +6,13 @@ from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QMessageBox
 from PyQt5.QtWidgets import QWidget, QLabel, QVBoxLayout
 from qt_material import apply_stylesheet
-
-
 class GameSticks(QMainWindow):
     def keyPressEvent(self, event):
         if event.key() == Qt.Key_Escape:
             QtWidgets.qApp.quit()
 
-
 def exit_game():
     QtWidgets.qApp.quit()
-
 
 class Ui_GameSticks(object):
 
@@ -81,7 +77,6 @@ class Ui_GameSticks(object):
         if self.GameSticks:
             self.GameSticks.close()
 
-
 class EmptyWindow(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -136,7 +131,6 @@ class EmptyWindow(QMainWindow):
         self.turn_label.setAlignment(Qt.AlignRight)
         self.turn_label.setStyleSheet('font-size: 26px; font-weight: bold;'
                                       'color: rgb(76,76,76)')
-
     def show_popup(self):
         popup = QMessageBox()
         popup.setIcon(QMessageBox.Information)
@@ -155,7 +149,7 @@ class EmptyWindow(QMainWindow):
                 self.win_label.setAlignment(Qt.AlignCenter)
                 self.win_label.setStyleSheet('font-size: 26px; font-weight: bold; color: rgb(76,76,76)')
                 self.win_label.show()
-                self.turn_label.setText("Игра закончена")  # Изменяем текст в turn_label
+                self.turn_label.setText("Игра закончена")
             else:
                 self.turn_number = 2 if self.turn_number == 1 else 1
                 self.turn_label.setText(f'Ход игрока: {self.turn_number}')
@@ -175,22 +169,20 @@ class EmptyWindow(QMainWindow):
                 button_to_hide = self.buttons.pop(0)
                 button_to_hide.hide()
 
-            if len(self.buttons) == 1:  # Проверяем, что осталась только одна кнопка
+            if len(self.buttons) == 1:
                 winner_number = 2 if self.turn_number == 1 else 1
                 self.win_label = QLabel(f"!!!Игрок {winner_number} выиграл!!!", self)
                 self.win_label.setGeometry(250, 400, 300, 200)
                 self.win_label.setAlignment(Qt.AlignCenter)
                 self.win_label.setStyleSheet('font-size: 26px; font-weight: bold; color: rgb(76,76,76)')
                 self.win_label.show()
-                self.turn_label.setText("Игра закончена")  # Изменяем текст в turn_label
+                self.turn_label.setText("Игра закончена")
             else:
                 self.turn_number = 2 if self.turn_number == 1 else 1
                 self.turn_label.setText(f'Ход игрока: {self.turn_number}')
-
     def keyPressEvent(self, event):
         if event.key() == Qt.Key_Escape:
             QApplication.quit()
-
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
