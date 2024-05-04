@@ -20,7 +20,6 @@ class Ui_GameSticks(QMainWindow):
         self.setupUi()
 
     def setupUi(self):
-        # self.GameSticks = GameSticks
         self.label = QLabel()
         font = QFont()
         font.setFamily('Impact')
