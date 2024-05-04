@@ -1,10 +1,9 @@
 import sys
 
 from PyQt5 import QtCore, QtWidgets
-from PyQt5.QtCore import Qt, QEvent
+from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QFont
-from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QMessageBox, qApp
-from PyQt5.QtWidgets import QWidget, QLabel, QVBoxLayout
+from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton
 from qt_material import apply_stylesheet
 
 
@@ -12,7 +11,7 @@ class Ui_GameSticks(object):
     def setupUi(self, GameSticks):
         self.GameSticks = GameSticks
 
-        self.label = QLabel()
+        self.label = QtWidgets.QLabel()
         font = QFont()
         font.setFamily("Impact")
         self.label.setFont(font)
@@ -46,14 +45,14 @@ class Ui_GameSticks(object):
         self.pushButton_2.setText("Выйти из игры")
         self.pushButton_2.clicked.connect(self.exit_game)
 
-        vbox = QVBoxLayout()
+        vbox = QtWidgets.QVBoxLayout()
         vbox.addStretch(0)
         vbox.addWidget(self.label, alignment=QtCore.Qt.AlignCenter)
         vbox.addWidget(self.pushButton, alignment=QtCore.Qt.AlignCenter)
         vbox.addWidget(self.pushButton_2, alignment=QtCore.Qt.AlignCenter)
         vbox.addStretch()
 
-        self.centralwidget = QWidget()
+        self.centralwidget = QtWidgets.QWidget()
         self.centralwidget.setStyleSheet("background-color: rgb(182,197,174)")
         self.centralwidget.setObjectName("centralwidget")
         self.centralwidget.setLayout(vbox)
@@ -73,11 +72,17 @@ class Ui_GameSticks(object):
         self.label.deleteLater()
         self.pushButton.deleteLater()
         self.pushButton_2.deleteLater()
+        print('clear')  # удалить потом
+        self.init_empty_window()
+
+    def init_empty_window(self):
+        empty_window = EmptyWindow()
+        empty_window.show()
 
 
 class EmptyWindow(QMainWindow):
-    def init(self):
-        super().init()
+    def __init__(self):
+        super().__init__()
         self.setStyleSheet("background-color: rgb(182,197,174)")
         self.setFixedSize(800, 600)
 
@@ -85,16 +90,7 @@ class EmptyWindow(QMainWindow):
         for i in range(15):
             button = QPushButton(" ", self)
             button.setGeometry(30 + 50 * (i % 15), 40 + 80 * (i // 15), 30, 170)
-
-
-if __name__ == "__main__":
-    app = QApplication(sys.argv)
-    GameSticks = QMainWindow()
-    ui = Ui_GameSticks()
-    ui.setupUi(GameSticks)
-    apply_stylesheet(app, theme='rgb(152,160,164)')
-    GameSticks.show()
-    sys.exit(app.exec_())
+        print('инициализация')
 
 
 if __name__ == "__main__":
