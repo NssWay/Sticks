@@ -1,18 +1,12 @@
 import sys
+import random
 
-from PyQt5 import QtCore, QtWidgets
+from PyQt5 import QtCore
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QMessageBox
 from PyQt5.QtWidgets import QWidget, QLabel, QVBoxLayout
 from qt_material import apply_stylesheet
-
-
-# class GameSticks(QMainWindow):
-#     def keyPressEvent(self, event):
-#         if event.key() == Qt.Key_Escape:
-#             QtWidgets.qApp.quit()
-
 
 class Ui_GameSticks(QMainWindow):
     def __init__(self):
@@ -34,14 +28,14 @@ class Ui_GameSticks(QMainWindow):
 
         self.pushButton = QPushButton()
         self.pushButton.setEnabled(True)
-        self.pushButton.setStyleSheet('background: #3e68afcc;'
+        self.pushButton.setStyleSheet('background: #2f68c8ed;'
                                       'min-height: 70px;'
                                       'max-width: 300px;'
                                       'min-width: 250px;'
                                       'margin-bottom: 20px;'
                                       'font-size: 20px;'
-                                      'color: #96442C;'
-                                      'border: 2px solid #96442C ')  # обводка
+                                      'color: #000000;'
+                                      'border: 2px solid #000000 ')
         # сделать так, чтоб при наведении кнопка заливалась
         self.pushButton.setObjectName('pushButton')
         self.pushButton.setText('Начать игру')
@@ -54,8 +48,8 @@ class Ui_GameSticks(QMainWindow):
                                         'min-width: 250px;'
                                         'margin-bottom: 20px;'
                                         'font-size: 20px;'
-                                        'color: #96442C;'
-                                        'border: 2px solid #96442C ')
+                                        'color: #000000;'
+                                        'border: 2px solid #000000 ')
         self.pushButton_2.setObjectName('pushButton_2')
         self.pushButton_2.setText('Выйти из игры')
         self.pushButton_2.clicked.connect(self.exit_game)
@@ -68,11 +62,15 @@ class Ui_GameSticks(QMainWindow):
         vbox.addStretch()
 
         self.centralwidget = QWidget()
-        self.centralwidget.setStyleSheet('background-image: url("pictures/StartWindowPict.jpg"); '
-                                         'background-repeat: no-repeat; '
-                                         'background-position: center;')
         self.centralwidget.setObjectName('centralwidget')
         self.centralwidget.setLayout(vbox)
+        images = ["pictures/StartWindow1.jpg", "pictures/StartWindow2.jpg", "pictures/StartWindow3.jpg",
+                  "pictures/StartWindow4.jpg", "pictures/StartWindow5.jpg"]
+        random_image = random.choice(images)
+        self.centralwidget.setStyleSheet('background-image: url("{}"); '
+                                         'background-repeat: no-repeat; '
+                                         'background-position: center;'.format(random_image))
+
 
         self.setWindowTitle('GameSticks')
         self.resize(800, 600)
@@ -110,7 +108,10 @@ class EmptyWindow(QMainWindow):
         for i in range(15):
             button = QPushButton(' ', self)
             button.setGeometry(30 + 50 * (i % 15), 40 + 80 * (i // 15), 30, 170)
+            sticks = ["pictures/SticksVar1", ] #тут добавить еще моделек для палочек
+            random_sticks = random.choice(sticks)
             button.setStyleSheet('background-color: rgb(149,163,146)')
+            button.setStyleSheet('background-image: url("{}");'.format(random_sticks))
             button.show()
             self.buttons.append(button)
 
@@ -155,10 +156,8 @@ class EmptyWindow(QMainWindow):
         popup.setWindowTitle('Restart Confirmation')
         popup.setText('Вы уверены, что хотите начать игру заново?')
         popup.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
-        # popup.setDefaultButton(QMessageBox.No)
         returnValue = popup.exec()
         if returnValue == QMessageBox.Yes:
-            print('Yes clicked')
             self.buttons = []
             if len(self.buttons) == 1:
                 winner_number = 2 if self.turn_number == 1 else 1
