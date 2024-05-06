@@ -8,7 +8,8 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QMessageBox
 from PyQt5.QtWidgets import QWidget, QLabel, QVBoxLayout
 from qt_material import apply_stylesheet
 
-class Ui_GameSticks(QMainWindow):
+
+class StartMenu(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setupUi()
@@ -71,13 +72,12 @@ class Ui_GameSticks(QMainWindow):
                                          'background-repeat: no-repeat; '
                                          'background-position: center;'.format(random_image))
 
-
         self.setWindowTitle('GameSticks')
         self.resize(800, 600)
         self.setCentralWidget(self.centralwidget)
 
     def start_game(self):
-        self.second_window = EmptyWindow()
+        self.second_window = GameZone()
         self.second_window.show()
         self.second_window.setStyleSheet('background-color: rgb(182,197,174)')
         self.second_window.move(self.pos())
@@ -92,9 +92,23 @@ class Ui_GameSticks(QMainWindow):
             self.close()
 
 
-class EmptyWindow(QMainWindow):
+class GameZone(QMainWindow):
+
     def __init__(self):
         super().__init__()
+        self.centralwidget = QWidget()
+        self.centralwidget.setObjectName('centralwidget')
+        self.setCentralWidget(self.centralwidget)
+        vbox = QVBoxLayout()
+        self.centralwidget.setLayout(vbox)
+
+        images = ["pictures/StartWindow1.jpg", "pictures/StartWindow2.jpg", "pictures/StartWindow3.jpg",
+                  "pictures/StartWindow4.jpg", "pictures/StartWindow5.jpg"]
+        random_image = random.choice(images)
+
+        self.centralwidget.setStyleSheet('background-image: url("{}"); '
+                                         'background-repeat: no-repeat; '
+                                         'background-position: center;'.format(random_image))
 
         self.win_label = None
         self.turn_label = None
@@ -108,7 +122,7 @@ class EmptyWindow(QMainWindow):
         for i in range(15):
             button = QPushButton(' ', self)
             button.setGeometry(30 + 50 * (i % 15), 40 + 80 * (i // 15), 30, 170)
-            sticks = ["pictures/SticksVar1", ] #тут добавить еще моделек для палочек
+            sticks = ["pictures/SticksVar1", ]  # тут добавить еще моделек для палочек
             random_sticks = random.choice(sticks)
             button.setStyleSheet('background-color: rgb(149,163,146)')
             button.setStyleSheet('background-image: url("{}");'.format(random_sticks))
@@ -119,36 +133,74 @@ class EmptyWindow(QMainWindow):
         label.setObjectName('label')
         label.setGeometry(20, 300, 400, 30)
         label.setAlignment(Qt.AlignCenter)
-        label.setStyleSheet('font-size: 24px; font-weight: bold;'
-                            'color: rgb(76,76,76)')
+        label.setStyleSheet('background: transparent;'
+                            'font-size: 26px;'
+                            'font-weight: bold;'
+                            'font-size: 24px;'
+                            'color: #000000;'
+                            'font-weight: bold;')
         label.show()
 
         play_button1 = QPushButton('1', self)
         play_button1.setGeometry(40, 350, 100, 30)
-        play_button1.setStyleSheet('background-color: rgb(149,163,146); color: rgb(76,76,76);')
+        play_button1.setStyleSheet('background: #3e68afcc;'
+                                   'min-height: 30px;'
+                                   'max-width: 100px;'
+                                   'min-width: 100px;'
+                                   'margin-bottom: 20px;'
+                                   'font-size: 20px;'
+                                   'color: #000000;'
+                                   'border: 2px solid #000000 ')
         play_button1.clicked.connect(lambda: self.hide_buttons(1))
 
         play_button2 = QPushButton('2', self)
         play_button2.setGeometry(160, 350, 100, 30)
-        play_button2.setStyleSheet('background-color: rgb(149,163,146); color: rgb(76,76,76);')
+        play_button2.setStyleSheet('background: #3e68afcc;'
+                                   'min-height: 30px;'
+                                   'max-width: 100px;'
+                                   'min-width: 100px;'
+                                   'margin-bottom: 20px;'
+                                   'font-size: 20px;'
+                                   'color: #000000;'
+                                   'border: 2px solid #000000 ')
         play_button2.clicked.connect(lambda: self.hide_buttons(2))
 
         play_button3 = QPushButton('3', self)
         play_button3.setGeometry(280, 350, 100, 30)
-        play_button3.setStyleSheet('background-color: rgb(149,163,146); color: rgb(76,76,76);')
+        play_button3.setStyleSheet('background: #3e68afcc;'
+                                   'min-height: 30px;'
+                                   'max-width: 100px;'
+                                   'min-width: 100px;'
+                                   'margin-bottom: 20px;'
+                                   'font-size: 20px;'
+                                   'color: #000000;'
+                                   'border: 2px solid #000000 ')
         play_button3.clicked.connect(lambda: self.hide_buttons(3))
 
         restart_button = QPushButton('Restart', self)
         restart_button.setGeometry(600, 450, 120, 45)
         restart_button.setStyleSheet('background-color: rgb(149,163,146); color: rgb(76,76,76);')
+        restart_button.setStyleSheet('background: #3e68afcc;'
+                                     'min-height: 30px;'
+                                     'max-width: 100px;'
+                                     'min-width: 100px;'
+                                     'margin-bottom: 20px;'
+                                     'font-size: 20px;'
+                                     'color: #000000;'
+                                     'border: 2px solid #000000 ')
         restart_button.clicked.connect(self.show_popup)
 
         self.turn_number = 1
         self.turn_label = QLabel(f'  Xод игрока: {self.turn_number}', self)
         self.turn_label.setGeometry(450, 300, 250, 30)
         self.turn_label.setAlignment(Qt.AlignRight)
-        self.turn_label.setStyleSheet('font-size: 26px; font-weight: bold;'
-                                      'color: rgb(76,76,76)')
+        self.turn_label.setStyleSheet('background: transparent;'
+                                      'min-height: 30px;'
+                                      'margin-bottom: 20px;'
+                                      'font-size: 26px;'
+                                      'font-weight: bold;'
+                                      'font-size: 20px;'
+                                      'color: #000000;')
 
     def show_popup(self):
         popup = QMessageBox()
@@ -164,7 +216,14 @@ class EmptyWindow(QMainWindow):
                 self.win_label = QLabel(f'!!!Игрок {winner_number} выиграл!!!', self)
                 self.win_label.setGeometry(250, 400, 300, 200)
                 self.win_label.setAlignment(Qt.AlignCenter)
-                self.win_label.setStyleSheet('font-size: 26px; font-weight: bold; color: rgb(76,76,76)')
+                self.win_label.setStyleSheet('background: transparent;' #доделать задний фон
+                                             'min-height: 30px;'
+                                             'margin-bottom: 20px;'
+                                             'font-size: 26px;'
+                                             'font-weight: bold;'
+                                             'font-size: 20px;'
+                                             'color: #000000;')
+
                 self.win_label.show()
                 self.turn_label.setText('Игра закончена')
             else:
@@ -205,7 +264,7 @@ class EmptyWindow(QMainWindow):
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    GameSticks = Ui_GameSticks()
+    GameSticks = StartMenu()
     apply_stylesheet(app, theme='rgb(152,160,164)')
     GameSticks.show()
     sys.exit(app.exec_())
