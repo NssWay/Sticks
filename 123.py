@@ -122,9 +122,8 @@ class GameZone(QMainWindow):
         for i in range(15):
             button = QPushButton(' ', self)
             button.setGeometry(30 + 50 * (i % 15), 40 + 80 * (i // 15), 30, 170)
-            sticks = ["pictures/SticksVar1", ]  # тут добавить еще моделек для палочек
-            random_sticks = random.choice(sticks)
-            button.setStyleSheet('background-color: rgb(149,163,146)')
+            sticks = ["pictures/Stick1", ]  #сделать более красивые модели палок
+            random_sticks = random.choice(sticks) #после перезапуска пропадают модели палок
             button.setStyleSheet('background-image: url("{}");'.format(random_sticks))
             button.show()
             self.buttons.append(button)
@@ -216,7 +215,7 @@ class GameZone(QMainWindow):
                 self.win_label = QLabel(f'!!!Игрок {winner_number} выиграл!!!', self)
                 self.win_label.setGeometry(250, 400, 300, 200)
                 self.win_label.setAlignment(Qt.AlignCenter)
-                self.win_label.setStyleSheet('background: transparent;' #доделать задний фон
+                self.win_label.setStyleSheet('background: transparent;'
                                              'min-height: 30px;'
                                              'margin-bottom: 20px;'
                                              'font-size: 26px;'
