@@ -37,7 +37,6 @@ class StartMenu(QMainWindow):
                                       'font-size: 20px;'
                                       'color: #000000;'
                                       'border: 2px solid #000000 ')
-        # сделать так, чтоб при наведении кнопка заливалась
         self.pushButton.setObjectName('pushButton')
         self.pushButton.setText('Начать игру')
         self.pushButton.clicked.connect(self.start_game)
@@ -122,9 +121,7 @@ class GameZone(QMainWindow):
         for i in range(15):
             button = QPushButton(' ', self)
             button.setGeometry(30 + 50 * (i % 15), 40 + 80 * (i // 15), 30, 170)
-            sticks = ["pictures/Stick1", ]  #сделать более красивые модели палок
-            random_sticks = random.choice(sticks) #после перезапуска пропадают модели палок
-            button.setStyleSheet('background-image: url("{}");'.format(random_sticks))
+            button.setStyleSheet("QPushButton {border: none; margin : 0px; padding: 0px; border-image: url(pictures/stick.png);}")
             button.show()
             self.buttons.append(button)
 
@@ -231,7 +228,8 @@ class GameZone(QMainWindow):
             for i in range(15):
                 button = QPushButton(' ', self)
                 button.setGeometry(30 + 50 * (i % 15), 40 + 80 * (i // 15), 30, 170)
-                button.setStyleSheet('background-color: rgb(149,163,146)')
+                button.setStyleSheet(
+                    "QPushButton {border: none; margin : 0px; padding: 0px; border-image: url(pictures/stick.png);}")
                 self.buttons.append(button)
                 button.show()
         else:
@@ -249,7 +247,8 @@ class GameZone(QMainWindow):
                 self.win_label = QLabel(f'!!!Игрок {winner_number} выиграл!!!', self)
                 self.win_label.setGeometry(250, 400, 300, 200)
                 self.win_label.setAlignment(Qt.AlignCenter)
-                self.win_label.setStyleSheet('font-size: 26px; font-weight: bold; color: rgb(76,76,76)')
+                self.win_label.setStyleSheet('background-color: rgba(0, 0, 0, 0);' 
+                                             'font-size: 26px; font-weight: bold; color: rgb(0,0,0)')
                 self.win_label.show()
                 self.turn_label.setText('Игра закончена')
             else:
