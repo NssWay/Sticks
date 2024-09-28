@@ -6,15 +6,11 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QMessageBox
 from PyQt5.QtWidgets import QWidget, QLabel, QVBoxLayout
-from qt_material import apply_stylesheet
 
 
 class StartMenu(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setupUi()
-
-    def setupUi(self):
         self.label = QLabel()
         font = QFont()
         font.setFamily('Impact')
@@ -90,16 +86,18 @@ class StartMenu(QMainWindow):
         if event.key() == Qt.Key_Escape:
             self.close()
 
-
 class GameZone(QMainWindow):
 
     def __init__(self):
         super().__init__()
-        self.centralwidget = QWidget()
+        self.wind = None
+        self.centralwidget = QWidget(self)
         self.centralwidget.setObjectName('centralwidget')
         self.setCentralWidget(self.centralwidget)
         vbox = QVBoxLayout()
         self.centralwidget.setLayout(vbox)
+        self.setFixedSize(800, 600)
+
 
         images = ["pictures/StartWindow1.jpg", "pictures/StartWindow2.jpg", "pictures/StartWindow3.jpg",
                   "pictures/StartWindow4.jpg", "pictures/StartWindow5.jpg"]
@@ -114,9 +112,7 @@ class GameZone(QMainWindow):
         self.turn_number = None
         self.buttons = None
         self.setWindowTitle('GameSticks')
-        self.setupUi()
 
-    def setupUi(self):
         self.buttons = []
         for i in range(15):
             button = QPushButton(' ', self)
@@ -175,7 +171,6 @@ class GameZone(QMainWindow):
 
         restart_button = QPushButton('Restart', self)
         restart_button.setGeometry(600, 450, 120, 45)
-        restart_button.setStyleSheet('background-color: rgb(149,163,146); color: rgb(76,76,76);')
         restart_button.setStyleSheet('background: #3e68afcc;'
                                      'min-height: 30px;'
                                      'max-width: 100px;'
@@ -184,7 +179,7 @@ class GameZone(QMainWindow):
                                      'font-size: 20px;'
                                      'color: #000000;'
                                      'border: 2px solid #000000 ')
-        restart_button.clicked.connect(self.show_popup)
+        restart_button.clicked.connect(self.restart_game)
 
         self.turn_number = 1
         self.turn_label = QLabel(f'  Xод игрока: {self.turn_number}', self)
@@ -198,43 +193,12 @@ class GameZone(QMainWindow):
                                       'font-size: 20px;'
                                       'color: #000000;')
 
-    def show_popup(self):
-        popup = QMessageBox()
-        popup.setIcon(QMessageBox.Information)
-        popup.setWindowTitle('Restart Confirmation')
-        popup.setText('Вы уверены, что хотите начать игру заново?')
-        popup.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
-        returnValue = popup.exec()
-        if returnValue == QMessageBox.Yes:
-            self.buttons = []
-            if len(self.buttons) == 1:
-                winner_number = 2 if self.turn_number == 1 else 1
-                self.win_label = QLabel(f'!!!Игрок {winner_number} выиграл!!!', self)
-                self.win_label.setGeometry(250, 400, 300, 200)
-                self.win_label.setAlignment(Qt.AlignCenter)
-                self.win_label.setStyleSheet('background: transparent;'
-                                             'min-height: 30px;'
-                                             'margin-bottom: 20px;'
-                                             'font-size: 26px;'
-                                             'font-weight: bold;'
-                                             'font-size: 20px;'
-                                             'color: #000000;')
+    def restart_game(self):
+        self.wind = GameZone()
+        self.wind.show()
+        self.close()
 
-                self.win_label.show()
-                self.turn_label.setText('Игра закончена')
-            else:
-                self.turn_number = 2 if self.turn_number == 1 else 1
-                self.turn_label.setText(f'Ход игрока: {self.turn_number}')
-            for i in range(15):
-                button = QPushButton(' ', self)
-                button.setGeometry(30 + 50 * (i % 15), 40 + 80 * (i // 15), 30, 170)
-                button.setStyleSheet(
-                    "QPushButton {border: none; margin : 0px; padding: 0px; border-image: url(pictures/stick.png);}")
-                self.buttons.append(button)
-                button.show()
-        else:
-            self.close()
-            print('No clicked')
+
 
     def hide_buttons(self, num_to_hide):
         if len(self.buttons) > num_to_hide:
@@ -259,10 +223,9 @@ class GameZone(QMainWindow):
         if event.key() == Qt.Key_Escape:
             self.close()
 
-
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     GameSticks = StartMenu()
-    apply_stylesheet(app, theme='rgb(152,160,164)')
+    #apply_stylesheet(app, theme='default')
     GameSticks.show()
     sys.exit(app.exec_())
